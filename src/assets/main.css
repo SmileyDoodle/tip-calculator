@@ -22,6 +22,20 @@ body {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
 }
+
+input[type="text"] {
+  font-family: 'Inter', sans-serif;
+  border-bottom: 3px dotted #B3B3B3;
+}
+
+input[type=radio] {
+  display: none;
+}
+
+input[type=radio]:checked+label {
+  background: #60C1B6;
+  color: white;
+}
  
 /* .wrapper {
   background: #FFFFFF;

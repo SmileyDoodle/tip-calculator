@@ -23,41 +23,49 @@
       </div>
     </div>
 
-    <div class="input-fields grid grid-cols-2 bg-gray-100">
+    <div class="input-fields grid grid-cols-2 bg-gray-100 pt-8">
       <div class="bill-amount">
-        <div class="field">
+        <div class="field flex items-baseline pl-6">
+          <DollarIcon class="h-[25px] w-[25px]" />
           <input
             type="text"
             id="bill-amount"
             name="bill-amount"
             value="102.02"
+            class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
           />
         </div>
-        <div class="label">Bill Amount</div>
+        <div class="label font-bold text-center pt-2">Bill Amount</div>
       </div>
       <div class="number-of-people">
-        <div class="field">
+        <div class="field flex items-baseline pl-6">
+          <PeopleIcon class="h-[25px] w-[25px]" />
           <input
             type="text"
             id="number-of-people"
             name="number-of-people"
             value="3"
+            class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
           />
         </div>
-        <div class="label">Number of People</div>
+        <div class="label font-bold text-center pt-2">Number of People</div>
       </div>
     </div>
 
     <div class="tip-percentages grid grid-cols-4 bg-gray-200">
-      <div>
+      <div class="flex items-center justify-center">
         <input type="radio" name="tip" value="5%" id="five-percent" />
-        <label for="five-percent"> 5% </label>
+        <label for="five-percent" class="rounded-lg px-8 py-2 bg-white">
+          5%
+        </label>
       </div>
-      <div>
+      <div class="flex items-center justify-center">
         <input type="radio" name="tip" value="10%" id="ten-percent" />
-        <label for="ten-percent"> 10% </label>
+        <label for="ten-percent" class="rounded-lg px-8 py-2 bg-white">
+          10%
+        </label>
       </div>
-      <div>
+      <div class="flex items-center justify-center">
         <input
           type="radio"
           name="tip"
@@ -65,25 +73,40 @@
           value="15%"
           id="fifteen-percent"
         />
-        <label for="fifteen-percent"> 15% </label>
+        <label for="fifteen-percent" class="rounded-lg px-8 py-2 bg-white">
+          15%
+        </label>
       </div>
-      <div>
+      <div class="flex items-center justify-center">
         <input type="radio" name="tip" value="20%" id="twenty-percent" />
-        <label for="twenty-percent"> 20% </label>
+        <label for="twenty-percent" class="rounded-lg px-8 py-2 bg-white">
+          20%
+        </label>
       </div>
     </div>
 
-    <div class="button-wrapper bg-gray-100">
-      <button id="calculate">Calculate</button>
+    <div class="button-wrapper bg-gray-100 flex items-center justify-end pr-7">
+      <button
+        id="calculate"
+        class="bg-orange-600 rounded-lg px-4 py-2 text-white"
+      >
+        Calculate
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import DollarIcon from "../components/icons/DollarIcon.vue";
+import PeopleIcon from "../components/icons/PeopleIcon.vue";
 
 export default defineComponent({
   name: "TipCalculator",
+  components: {
+    DollarIcon,
+    PeopleIcon,
+  },
   data() {
     return {};
   },
