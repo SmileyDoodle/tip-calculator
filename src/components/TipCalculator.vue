@@ -10,7 +10,7 @@
       </div>
       <div class="dollars font-bold">
         <sup class="text-4xl">$</sup
-        ><span id="tip-amount" class="text-6xl">15.30</span>
+        ><span id="tip-amount" class="text-6xl">{{ tipAmount }}</span>
       </div>
     </div>
     <div class="total-per-person grid grid-cols-2 content-center h-full w-full">
@@ -21,7 +21,9 @@
       </div>
       <div class="dollars font-bold">
         <sup class="text-4xl">$</sup
-        ><span id="total-per-person" class="text-6xl">39.11</span>
+        ><span id="total-per-person" class="text-6xl">{{
+          totalPerPerson
+        }}</span>
       </div>
     </div>
 
@@ -30,10 +32,11 @@
         <div class="field flex items-baseline pl-6">
           <DollarIcon class="h-[25px] w-[25px]" />
           <input
-            type="text"
+            type="number"
+            min="0"
             id="bill-amount"
             name="bill-amount"
-            value="102.02"
+            v-model="billAmount"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
           />
         </div>
@@ -43,10 +46,11 @@
         <div class="field flex items-baseline pl-6">
           <PeopleIcon class="h-[25px] w-[25px]" />
           <input
-            type="text"
+            type="number"
+            min="0"
             id="number-of-people"
             name="number-of-people"
-            value="3"
+            v-model="numberOfPeople"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
           />
         </div>
@@ -55,46 +59,23 @@
     </div>
 
     <div class="tip-percentages grid grid-cols-4 bg-gray-200">
-      <div class="flex items-center justify-center">
-        <input type="radio" name="tip" value="5%" id="five-percent" />
-        <label
-          for="five-percent"
-          class="tip-percentages-btn rounded-lg px-8 py-2 bg-white"
-        >
-          5%
-        </label>
-      </div>
-      <div class="flex items-center justify-center">
-        <input type="radio" name="tip" value="10%" id="ten-percent" />
-        <label
-          for="ten-percent"
-          class="tip-percentages-btn rounded-lg px-8 py-2 bg-white"
-        >
-          10%
-        </label>
-      </div>
-      <div class="flex items-center justify-center">
+      <div
+        class="flex items-center justify-center"
+        v-for="(percentage, index) in percentages"
+        :key="index"
+      >
         <input
           type="radio"
           name="tip"
-          checked
-          value="15%"
-          id="fifteen-percent"
+          :value="percentage.value"
+          :id="`${percentage.label}-percent`"
+          @click="getPercentage(percentage.value)"
         />
         <label
-          for="fifteen-percent"
-          class="tip-percentages-btn rounded-lg px-8 py-2 bg-white"
+          :for="`${percentage.label}-percent`"
+          class="tip-percentages-btn rounded-lg px-8 py-2 bg-white hover:bg-zinc-100"
         >
-          15%
-        </label>
-      </div>
-      <div class="flex items-center justify-center">
-        <input type="radio" name="tip" value="20%" id="twenty-percent" />
-        <label
-          for="twenty-percent"
-          class="tip-percentages-btn rounded-lg px-8 py-2 bg-white"
-        >
-          20%
+          {{ percentage.text }}
         </label>
       </div>
     </div>
@@ -103,6 +84,7 @@
       <button
         id="calculate"
         class="bg-orange-600 rounded-lg px-4 py-2 text-white hover:bg-orange-700"
+        @click="calculate()"
       >
         Calculate
       </button>
@@ -122,7 +104,35 @@ export default defineComponent({
     PeopleIcon,
   },
   data() {
-    return {};
+    return {
+      billAmount: 0 as number,
+      numberOfPeople: 0 as number,
+      percentages: [
+        { value: 0.05, text: "5%", label: "five" },
+        { value: 0.1, text: "10%", label: "ten" },
+        { value: 0.15, text: "15%", label: "fifteen" },
+        { value: 0.2, text: "20%", label: "twenty" },
+      ],
+      checked: 0 as number,
+      percentageBill: 0 as number,
+    };
+  },
+  computed: {
+    tipAmount(): number {
+      return this.percentageBill * this.numberOfPeople;
+    },
+    totalPerPerson(): number {
+      const eachperson = this.billAmount / this.numberOfPeople;
+      return this.percentageBill + eachperson;
+    },
+  },
+  methods: {
+    getPercentage(value: number) {
+      this.checked = value;
+    },
+    calculate() {
+      this.percentageBill = this.billAmount * this.checked;
+    },
   },
 });
 </script>

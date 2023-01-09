@@ -27,7 +27,7 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-input[type="text"] {
+input[type="number"] {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   border-bottom: 3px dotted #B3B3B3;
