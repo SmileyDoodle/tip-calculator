@@ -1,5 +1,5 @@
 @import './base.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Roboto+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,8 +23,13 @@ body {
   font-weight: 700;
 }
 
+.tip-percentages-btn {
+  font-family: 'Inter', sans-serif;
+}
+
 input[type="text"] {
   font-family: 'Inter', sans-serif;
+  font-weight: 700;
   border-bottom: 3px dotted #B3B3B3;
 }
 
