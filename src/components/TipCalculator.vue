@@ -41,6 +41,12 @@
           />
         </div>
         <div class="label font-bold text-center pt-2">Bill Amount</div>
+        <div
+          class="flex items-center justify-center"
+          v-show="billAmountVerification"
+        >
+          <p class="text-red-600">Oops, value can't be 0</p>
+        </div>
       </div>
       <div class="number-of-people pt-8">
         <div class="field flex items-baseline pl-6">
@@ -55,28 +61,42 @@
           />
         </div>
         <div class="label font-bold text-center pt-2">Number of People</div>
+        <div
+          class="flex items-center justify-center"
+          v-show="numberOfPeopleVerification"
+        >
+          <p class="text-red-600">Oops, value can't be 0</p>
+        </div>
       </div>
     </div>
 
-    <div class="tip-percentages grid grid-cols-4 bg-gray-200">
+    <div class="tip-percentages grid bg-gray-200">
+      <div class="grid grid-cols-4">
+        <div
+          class="flex items-center justify-center"
+          v-for="(percentage, index) in percentages"
+          :key="index"
+        >
+          <input
+            type="radio"
+            name="tip"
+            :value="percentage.value"
+            :id="`${percentage.label}-percent`"
+            @click="getPercentage(percentage.value)"
+          />
+          <label
+            :for="`${percentage.label}-percent`"
+            class="tip-percentages-btn rounded-lg px-8 py-2 bg-white hover:bg-zinc-100"
+          >
+            {{ percentage.text }}
+          </label>
+        </div>
+      </div>
       <div
         class="flex items-center justify-center"
-        v-for="(percentage, index) in percentages"
-        :key="index"
+        v-show="checkedVerification"
       >
-        <input
-          type="radio"
-          name="tip"
-          :value="percentage.value"
-          :id="`${percentage.label}-percent`"
-          @click="getPercentage(percentage.value)"
-        />
-        <label
-          :for="`${percentage.label}-percent`"
-          class="tip-percentages-btn rounded-lg px-8 py-2 bg-white hover:bg-zinc-100"
-        >
-          {{ percentage.text }}
-        </label>
+        <p class="text-red-600">Choose a tip persentage</p>
       </div>
     </div>
 
@@ -105,8 +125,12 @@ export default defineComponent({
   },
   data() {
     return {
+      tipAmount: 0 as number,
+      totalPerPerson: 0 as number,
       billAmount: 0 as number,
+      billAmountVerification: false as boolean,
       numberOfPeople: 0 as number,
+      numberOfPeopleVerification: false as boolean,
       percentages: [
         { value: 0.05, text: "5%", label: "five" },
         { value: 0.1, text: "10%", label: "ten" },
@@ -114,24 +138,52 @@ export default defineComponent({
         { value: 0.2, text: "20%", label: "twenty" },
       ],
       checked: 0 as number,
+      checkedVerification: false as boolean,
       percentageBill: 0 as number,
     };
   },
-  computed: {
-    tipAmount(): number {
-      return this.percentageBill * this.numberOfPeople;
-    },
-    totalPerPerson(): number {
-      const eachperson = this.billAmount / this.numberOfPeople;
-      return this.percentageBill + eachperson;
-    },
-  },
+  computed: {},
   methods: {
     getPercentage(value: number) {
       this.checked = value;
     },
     calculate() {
-      this.percentageBill = this.billAmount * this.checked;
+      this.verificationFailed();
+
+      if (!this.numberOfPeople) {
+        this.numberOfPeopleVerification = true;
+      }
+      if (!this.billAmount) {
+        this.billAmountVerification = true;
+      }
+      if (!this.checked) {
+        this.checkedVerification = true;
+      }
+      if (this.billAmount && this.numberOfPeople && this.checked) {
+        this.percentageBill = this.billAmount * this.checked;
+
+        this.verificationFailed();
+        this.tipAmountCalculation();
+        this.totalPerPersonCalculation();
+      }
+    },
+    tipAmountCalculation() {
+      if (this.billAmount && this.numberOfPeople && this.checked) {
+        this.tipAmount = this.percentageBill * this.numberOfPeople;
+      }
+    },
+    totalPerPersonCalculation() {
+      if (this.billAmount && this.numberOfPeople && this.checked) {
+        const eachperson = this.billAmount / this.numberOfPeople;
+        this.totalPerPerson = Number(
+          (this.percentageBill + eachperson).toFixed(2)
+        );
+      }
+    },
+    verificationFailed() {
+      this.numberOfPeopleVerification = false;
+      this.billAmountVerification = false;
+      this.checkedVerification = false;
     },
   },
 });
