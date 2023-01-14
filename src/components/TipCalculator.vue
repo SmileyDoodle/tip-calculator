@@ -34,19 +34,15 @@
           <input
             type="number"
             min="0"
+            placeholder="0"
             id="bill-amount"
             name="bill-amount"
             v-model="billAmount"
+            ref="billamount"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
           />
         </div>
         <div class="label font-bold text-center pt-2">Bill Amount</div>
-        <div
-          class="flex items-center justify-center"
-          v-show="billAmountVerification"
-        >
-          <p class="text-red-600">Oops, value can't be 0</p>
-        </div>
       </div>
       <div class="number-of-people pt-8">
         <div class="field flex items-baseline pl-6">
@@ -54,24 +50,20 @@
           <input
             type="number"
             min="0"
+            placeholder="0"
             id="number-of-people"
             name="number-of-people"
             v-model="numberOfPeople"
+            ref="numberofpeople"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
           />
         </div>
         <div class="label font-bold text-center pt-2">Number of People</div>
-        <div
-          class="flex items-center justify-center"
-          v-show="numberOfPeopleVerification"
-        >
-          <p class="text-red-600">Oops, value can't be 0</p>
-        </div>
       </div>
     </div>
 
     <div class="tip-percentages grid bg-gray-200">
-      <div class="grid grid-cols-4">
+      <div class="grid grid-cols-4 p-2">
         <div
           class="flex items-center justify-center"
           v-for="(percentage, index) in percentages"
@@ -92,18 +84,16 @@
           </label>
         </div>
       </div>
-      <div
-        class="flex items-center justify-center"
-        v-show="checkedVerification"
-      >
-        <p class="text-red-600">Choose a tip persentage</p>
-      </div>
     </div>
 
     <div class="button-wrapper bg-gray-100 flex items-center justify-end pr-7">
       <button
         id="calculate"
         class="bg-orange-600 rounded-lg px-4 py-2 text-white hover:bg-orange-700"
+        :class="{
+          'cursor-not-allowed disabled:opacity-50': !verificationFailed,
+        }"
+        :disabled="!verificationFailed"
         @click="calculate()"
       >
         Calculate
@@ -127,10 +117,8 @@ export default defineComponent({
     return {
       tipAmount: 0 as number,
       totalPerPerson: 0 as number,
-      billAmount: 0 as number,
-      billAmountVerification: false as boolean,
-      numberOfPeople: 0 as number,
-      numberOfPeopleVerification: false as boolean,
+      billAmount: (0 as number) || null,
+      numberOfPeople: (0 as number) || null,
       percentages: [
         { value: 0.05, text: "5%", label: "five" },
         { value: 0.1, text: "10%", label: "ten" },
@@ -138,31 +126,28 @@ export default defineComponent({
         { value: 0.2, text: "20%", label: "twenty" },
       ],
       checked: 0 as number,
-      checkedVerification: false as boolean,
       percentageBill: 0 as number,
     };
   },
-  computed: {},
+  computed: {
+    verificationFailed(): boolean {
+      if (this.numberOfPeople && this.billAmount && this.checked) {
+        return true;
+      }
+      return false;
+    },
+  },
+  mounted() {
+    this.$refs.billamount.focus();
+  },
   methods: {
     getPercentage(value: number) {
       this.checked = value;
     },
     calculate() {
-      this.verificationFailed();
-
-      if (!this.numberOfPeople) {
-        this.numberOfPeopleVerification = true;
-      }
-      if (!this.billAmount) {
-        this.billAmountVerification = true;
-      }
-      if (!this.checked) {
-        this.checkedVerification = true;
-      }
       if (this.billAmount && this.numberOfPeople && this.checked) {
         this.percentageBill = this.billAmount * this.checked;
 
-        this.verificationFailed();
         this.tipAmountCalculation();
         this.totalPerPersonCalculation();
       }
@@ -179,11 +164,6 @@ export default defineComponent({
           (this.percentageBill + eachperson).toFixed(2)
         );
       }
-    },
-    verificationFailed() {
-      this.numberOfPeopleVerification = false;
-      this.billAmountVerification = false;
-      this.checkedVerification = false;
     },
   },
 });
