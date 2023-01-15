@@ -31,3 +31,6 @@ describe('On load', () => {
     cy.get('[data-cy="calculate-btn"]').should('be.disabled');
   })
 })
+
+describe('Calculation', () => {
+})
