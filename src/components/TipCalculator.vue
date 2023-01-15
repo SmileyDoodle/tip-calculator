@@ -40,6 +40,7 @@
             v-model="billAmount"
             ref="billamount"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
+            data-cy="billamount"
           />
         </div>
         <div class="label font-bold text-center pt-2">Bill Amount</div>
@@ -56,6 +57,7 @@
             v-model="numberOfPeople"
             ref="numberofpeople"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
+            data-cy="numberofpeople"
           />
         </div>
         <div class="label font-bold text-center pt-2">Number of People</div>
@@ -75,6 +77,7 @@
             :value="percentage.value"
             :id="`${percentage.label}-percent`"
             @click="getPercentage(percentage.value)"
+            :data-cy="`${percentage.label}-percent`"
           />
           <label
             :for="`${percentage.label}-percent`"
@@ -95,6 +98,7 @@
         }"
         :disabled="!verificationFailed"
         @click="calculate()"
+        data-cy="calculate-btn"
       >
         Calculate
       </button>
@@ -154,7 +158,9 @@ export default defineComponent({
     },
     tipAmountCalculation() {
       if (this.billAmount && this.numberOfPeople && this.checked) {
-        this.tipAmount = this.percentageBill * this.numberOfPeople;
+        this.tipAmount = Number(
+          (this.percentageBill * this.numberOfPeople).toFixed(2)
+        );
       }
     },
     totalPerPersonCalculation() {
