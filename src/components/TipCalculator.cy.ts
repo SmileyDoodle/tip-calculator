@@ -32,5 +32,59 @@ describe('On load', () => {
   })
 })
 
-describe('Calculation', () => {
+describe('Calculation fail example', () => {
+  it('A required field input is missing', () => {
+    cy.mount(TipCalculator)
+    cy.get('[data-cy="billamount"]').type('100');
+    cy.get('[data-cy="numberofpeople"]').type('2');
+    cy.get('[data-cy="calculate-btn"]').should('be.disabled');
+  })
+})
+
+ describe('Calculation successful example 1', () => {
+  it('All required fields with round number input', () => {
+    cy.mount(TipCalculator)
+    cy.get('[data-cy="billamount"]').type('100');
+    cy.get('[data-cy="numberofpeople"]').type('2');
+    cy.get('[data-cy="ten-percent"]').check({ force: true });
+    cy.get('[data-cy="calculate-btn"]').should('be.not.disabled');
+    cy.get('[data-cy="calculate-btn"]').click();
+  })
+})
+
+describe('Calculation successful example 2', () => {
+  it('A required field should not take a negative value', () => {
+    cy.mount(TipCalculator)
+    cy.get('[data-cy="billamount"]').type('-100');
+    cy.get('[data-cy="billamount"]').should('have.value', '100')
+    cy.get('[data-cy="numberofpeople"]').type('-2');
+    cy.get('[data-cy="numberofpeople"]').should('have.value', '2')
+    cy.get('[data-cy="ten-percent"]').check({ force: true });
+    cy.get('[data-cy="calculate-btn"]').should('be.not.disabled');
+    cy.get('[data-cy="calculate-btn"]').click();
+  })
+})
+
+describe('Calculation successful example 3', () => {
+  it('A required field should take only numbers/dot/comma', () => {
+    cy.mount(TipCalculator)
+    cy.get('[data-cy="billamount"]').type('100.50');
+    cy.get('[data-cy="billamount"]').should('have.value', '100.50')
+    cy.get('[data-cy="numberofpeople"]').type('1.2');
+    cy.get('[data-cy="numberofpeople"]').should('have.value', '12')
+    cy.get('[data-cy="ten-percent"]').check({ force: true });
+    cy.get('[data-cy="calculate-btn"]').should('be.not.disabled');
+    cy.get('[data-cy="calculate-btn"]').click();
+  })
+})
+
+describe('Calculation successful example 4', () => {
+  it('A required fields with decimal input', () => {
+    cy.mount(TipCalculator)
+    cy.get('[data-cy="billamount"]').type('122.37');
+    cy.get('[data-cy="numberofpeople"]').type('4');
+    cy.get('[data-cy="fifteen-percent"]').check({ force: true });
+    cy.get('[data-cy="calculate-btn"]').should('be.not.disabled');
+    cy.get('[data-cy="calculate-btn"]').click();
+  })
 })

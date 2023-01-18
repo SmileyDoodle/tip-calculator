@@ -34,10 +34,12 @@
           <input
             type="number"
             min="0"
+            max="10000"
             placeholder="0"
             id="bill-amount"
             name="bill-amount"
             v-model="billAmount"
+            @keypress="isCurrencyKey($event)"
             ref="billamount"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
             data-cy="billamount"
@@ -51,10 +53,12 @@
           <input
             type="number"
             min="0"
+            max="1000"
             placeholder="0"
             id="number-of-people"
             name="number-of-people"
             v-model="numberOfPeople"
+            @keypress="isNumberKey($event)"
             ref="numberofpeople"
             class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
             data-cy="numberofpeople"
@@ -148,6 +152,24 @@ export default defineComponent({
     getPercentage(value: number) {
       this.checked = value;
     },
+    isNumberKey(event: any) {
+      var charCode = event.keyCode;
+      if (charCode < 48 || charCode > 57) {
+        // 48-57 are numbers
+        event.preventDefault();
+      }
+    },
+    isCurrencyKey(event: any) {
+      var charCode = event.keyCode;
+      if (
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46 &&
+        charCode !== 44
+      ) {
+        // 46 is dot, 44 is comma
+        event.preventDefault();
+      }
+    },
     calculate() {
       if (this.billAmount && this.numberOfPeople && this.checked) {
         this.percentageBill = this.billAmount * this.checked;
@@ -158,16 +180,13 @@ export default defineComponent({
     },
     tipAmountCalculation() {
       if (this.billAmount && this.numberOfPeople && this.checked) {
-        this.tipAmount = Number(
-          (this.percentageBill * this.numberOfPeople).toFixed(2)
-        );
+        this.tipAmount = Number(this.percentageBill.toFixed(2));
       }
     },
     totalPerPersonCalculation() {
       if (this.billAmount && this.numberOfPeople && this.checked) {
-        const eachperson = this.billAmount / this.numberOfPeople;
         this.totalPerPerson = Number(
-          (this.percentageBill + eachperson).toFixed(2)
+          ((this.billAmount + this.tipAmount) / this.numberOfPeople).toFixed(2)
         );
       }
     },
