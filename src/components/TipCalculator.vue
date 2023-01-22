@@ -1,36 +1,40 @@
 <template>
   <div class="grid rounded-lg bg-white shadow-2xl h-full w-full">
     <div
-      class="tip-amount grid grid-cols-2 content-center h-full w-full pt-2 border-b-2 border-gray-100"
+      class="tip-amount grid grid-cols-2 content-center h-full w-full pt-2 border-b-2 border-gray-100 max-sm:pt-6 max-sm:pb-6"
     >
       <div
-        class="label font-bold text-right flex items-center justify-end pr-6"
+        class="label font-bold text-right flex items-center justify-end pr-6 max-sm:text-[12px]"
       >
         Tip Amount
       </div>
       <div class="dollars font-bold">
-        <sup class="text-4xl">$</sup
-        ><span id="tip-amount" class="text-6xl">{{ tipAmount }}</span>
+        <sup class="text-2xl md:text-4xl">$</sup
+        ><span id="tip-amount" class="text-4xl md:text-6xl">{{
+          tipAmount
+        }}</span>
       </div>
     </div>
-    <div class="total-per-person grid grid-cols-2 content-center h-full w-full">
+    <div
+      class="total-per-person grid grid-cols-2 content-center h-full w-full max-sm:pt-6 max-sm:pb-6"
+    >
       <div
-        class="label font-bold text-right flex items-center justify-end pr-6"
+        class="label font-bold text-right flex items-center justify-end pr-6 max-sm:text-[12px]"
       >
         Total Per Person
       </div>
       <div class="dollars font-bold">
-        <sup class="text-4xl">$</sup
-        ><span id="total-per-person" class="text-6xl">{{
+        <sup class="text-2xl md:text-4xl">$</sup
+        ><span id="total-per-person" class="text-4xl md:text-6xl">{{
           totalPerPerson
         }}</span>
       </div>
     </div>
 
-    <div class="input-fields grid grid-cols-2 bg-gray-100">
+    <div class="input-fields grid grid-cols-2 bg-gray-100 max-sm:pb-6">
       <div class="bill-amount pt-8 border-r-2 border-gray-200">
         <div class="field flex items-baseline pl-6">
-          <DollarIcon class="h-[25px] w-[25px]" />
+          <DollarIcon class="h-[20px] w-[20px] md:h-[25px] md:w-[25px]" />
           <input
             type="number"
             min="0"
@@ -41,15 +45,15 @@
             v-model="billAmount"
             @keypress="isCurrencyKey($event)"
             ref="billamount"
-            class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
+            class="bg-gray-100 text-center mr-[10px] w-4/5 text-2xl md:text-4xl rounded-none bg-transparent outline-0"
             data-cy="billamount"
           />
         </div>
-        <div class="label font-bold text-center pt-2">Bill Amount</div>
+        <div class="label font-bold text-center pt-2 max-sm:text-[12px]">Bill Amount</div>
       </div>
       <div class="number-of-people pt-8">
         <div class="field flex items-baseline pl-6">
-          <PeopleIcon class="h-[25px] w-[25px]" />
+          <PeopleIcon class="h-[20px] w-[20px] md:h-[25px] md:w-[25px]" />
           <input
             type="number"
             min="0"
@@ -60,18 +64,20 @@
             v-model="numberOfPeople"
             @keypress="isNumberKey($event)"
             ref="numberofpeople"
-            class="bg-gray-100 text-center mr-[10px] w-4/5 text-4xl rounded-none bg-transparent outline-0"
+            class="bg-gray-100 text-center mr-[10px] w-4/5 text-2xl md:text-4xl rounded-none bg-transparent outline-0"
             data-cy="numberofpeople"
           />
         </div>
-        <div class="label font-bold text-center pt-2">Number of People</div>
+        <div class="label font-bold text-center pt-2 max-sm:text-[12px]">
+          Number of People
+        </div>
       </div>
     </div>
 
     <div class="tip-percentages grid bg-gray-200">
-      <div class="grid grid-cols-4 p-2">
+      <div class="grid grid-cols-2 md:grid-cols-4 p-2">
         <div
-          class="flex items-center justify-center"
+          class="flex items-center justify-center max-sm:p-2"
           v-for="(percentage, index) in percentages"
           :key="index"
         >
@@ -93,7 +99,9 @@
       </div>
     </div>
 
-    <div class="button-wrapper bg-gray-100 flex items-center justify-end pr-7">
+    <div
+      class="button-wrapper bg-gray-100 flex items-center justify-end pr-7 max-sm:py-3 max-sm:pr-10"
+    >
       <button
         id="calculate"
         class="bg-orange-600 rounded-lg px-4 py-2 text-white hover:bg-orange-700"
@@ -146,7 +154,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.$refs.billamount.focus();
+    (this.$refs.billamount as HTMLElement).focus();
   },
   methods: {
     getPercentage(value: number) {
@@ -194,7 +202,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-@media (min-width: 1024px) {
-}
-</style>
+<style scoped></style>
